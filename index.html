@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commission Photo Manipulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap"><nav>
+  <b>Nijimura<span>Studio</span></b>
+  <div><a href="#layanan">Layanan</a><a href="#portofolio">Portofolio</a><a href="#order">Order</a></div>
+</nav></div></header>
+
+<div class="wrap hero">
+  <h1>Commission <span>Photo Manipulation</span></h1>
+  <p>Ubah foto biasa jadi karya yang luar biasa. Terima order personal maupun bisnis.</p>
+  <a class="btn" href="#order">Pesan Sekarang</a> <a class="btn ghost" href="#portofolio">Lihat Portofolio</a>
+</div>
+
+<section id="layanan"><div class="wrap">
+  <h2>Layanan</h2><p class="sub">Pilih jasa sesuai kebutuhanmu.</p>
+  <div class="grid">
+    <div class="card"><h3>🎨 Photo Manipulation</h3><p>Penggabungan objek, efek surreal, komposisi kreatif, dan digital art.</p><div class="price">Mulai Rp 50.000</div></div>
+  </div>
+</div></section>
+
+<section id="portofolio"><div class="wrap">
+  <h2>Portofolio</h2><p class="sub">Contoh hasil kerja.</p>
+  <div class="gal" id="gal"></div>
+</div></section>
+
+<section id="order"><div class="wrap">
+  <h2>Order Commission</h2><p class="sub">Isi form, lalu kirim lewat WhatsApp.</p>
+  <form id="of">
+    <input id="n" placeholder="Nama" required>
+    <textarea id="d" rows="4" placeholder="Jelaskan kebutuhanmu, referensi, dan deadline" required></textarea>
+    <button class="btn" type="submit">Kirim via WhatsApp</button>
+  </form>
+</div></section>
+
+<footer>© 2026 NijimuraStudio. Semua hak dilindungi.</footer>
+<div id="lb"><button id="lbx">×</button><img id="lbi" alt=""></div>
+
+<script src="photos.js"></script>
+<script>
+const WA_NUMBER = "62895384923999"; // ganti dengan nomor WhatsApp kamu (format 62...)
+const $ = id => document.getElementById(id);
+let filter = "all";
+const esc = s => s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){
+  const g = $("gal"), items = PHOTOS.filter(p => filter === "all" || p.cat === filter);
+  g.innerHTML = items.length ? "" : '<div class="empty">Belum ada foto di kategori ini.</div>';
+  items.forEach(p => {
+    const el = document.createElement("div"); el.className = "item";
+    el.innerHTML = `<img src="${esc(p.file)}" alt="${esc(p.title)}" loading="lazy"><div class="cap"><span>${esc(p.title)}</span><small>${esc(p.tag || "Photo Manipulation")}</small></div>`;
+    el.querySelector("img").onclick = () => { $("lbi").src = p.file; $("lb").classList.add("on"); };
+    g.appendChild(el);
+  });
+}
+$("lb").onclick = e => { if(e.target.id !== "lbi") $("lb").classList.remove("on"); };
+$("of").onsubmit = e => {
+  e.preventDefault();
+  const t = `Halo, saya ${$("n").value}. Saya ingin order Photo Manipulation.\n\n${$("d").value}`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t)}`, "_blank");
+};
+render();
+</script>
+</body>
+</html>
